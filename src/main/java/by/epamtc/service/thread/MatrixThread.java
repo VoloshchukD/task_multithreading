@@ -1,11 +1,12 @@
-package by.epamtc.service;
+package by.epamtc.service.thread;
 
 import by.epamtc.entity.Matrix;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.Callable;
 
-public class MatrixAction {
+public class MatrixThread implements Callable<Integer> {
+
+    private int threadId;
 
     private Matrix matrix;
 
@@ -14,32 +15,31 @@ public class MatrixAction {
     private int mutableIndex;
 
     private boolean isRowMutableIndex;
-
-    public MatrixAction(Matrix matrix, int diagonalIndex, int mutableIndex, boolean isRowMutableIndex) {
-        this.matrix = matrix;
+    public MatrixThread(int threadId, int diagonalIndex, int mutableIndex, boolean isRowMutableIndex) {
+        this.matrix = Matrix.getInstance();
+        this.threadId = threadId;
         this.diagonalIndex = diagonalIndex;
         this.mutableIndex = mutableIndex;
         this.isRowMutableIndex = isRowMutableIndex;
     }
 
-    public int proceed() {
-        Lock lock = new ReentrantLock();
-        lock.lock();
+    @Override
+    public Integer call() throws Exception {
+        Thread.currentThread().setName((Integer.toString(threadId)));
         System.out.println("Start "  + Thread.currentThread().getName());
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
         System.out.println("End "  + Thread.currentThread().getName());
-        lock.unlock();
+        matrix.getElement(diagonalIndex, diagonalIndex).unlock();
         return resultSum;
     }
 
-    private boolean addDiagonalElement() {
-        String threadName = Thread.currentThread().getName();
-        return matrix.addElement(Integer.parseInt(threadName), diagonalIndex, diagonalIndex);
+    private void addDiagonalElement() {
+        matrix.getElement(diagonalIndex, diagonalIndex).changeValue(threadId);
     }
 
-    private boolean editElement() {
+    private void editElement() {
         int rowIndex = diagonalIndex;
         int columnIndex = diagonalIndex;
         if (isRowMutableIndex) {
@@ -47,19 +47,18 @@ public class MatrixAction {
         } else {
             columnIndex = mutableIndex;
         }
-        String threadName = Thread.currentThread().getName();
-        return matrix.addElement(Integer.parseInt(threadName), rowIndex, columnIndex);
+        matrix.getElement(rowIndex, columnIndex).changeValue(threadId);
     }
 
     private int countSum() {
         int sum = 0;
         for (int i = 0; i < matrix.size(); i++) {
             if (i != diagonalIndex) {
-                sum += matrix.getElement(i, diagonalIndex);
-                sum += matrix.getElement(diagonalIndex, i);
+                sum += matrix.getElement(i, diagonalIndex).getValue();
+                sum += matrix.getElement(diagonalIndex, i).getValue();
             }
         }
-        sum += matrix.getElement(diagonalIndex, diagonalIndex);
+        sum += matrix.getElement(diagonalIndex, diagonalIndex).getValue();
         return sum;
     }
 
