@@ -3,6 +3,7 @@ package by.epamtc.service.thread;
 import by.epamtc.entity.Matrix;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.CyclicBarrier;
 
 public class MatrixThread implements Callable<Integer> {
 
@@ -13,6 +14,16 @@ public class MatrixThread implements Callable<Integer> {
     private int diagonalIndex;
 
     private int mutableIndex;
+
+    private CyclicBarrier barrier;
+
+    public CyclicBarrier getBarrier() {
+        return barrier;
+    }
+
+    public void setBarrier(CyclicBarrier barrier) {
+        this.barrier = barrier;
+    }
 
     private boolean isRowMutableIndex;
     public MatrixThread(int threadId, int diagonalIndex, int mutableIndex, boolean isRowMutableIndex) {
@@ -32,6 +43,7 @@ public class MatrixThread implements Callable<Integer> {
         int resultSum = countSum();
         System.out.println("End "  + Thread.currentThread().getName());
         matrix.getElement(diagonalIndex, diagonalIndex).unlock();
+        barrier.await();
         return resultSum;
     }
 

@@ -3,6 +3,8 @@ package by.epamtc.run;
 import by.epamtc.entity.Element;
 import by.epamtc.entity.Matrix;
 import by.epamtc.service.MatrixThreadExecutor;
+import by.epamtc.service.thread.MatrixThread;
+import by.epamtc.util.Randomizer;
 
 import java.util.concurrent.*;
 
@@ -25,8 +27,18 @@ public class Runner {
 //        MatrixThread matrixThread = new MatrixThread(matrixAction);
 //        System.out.println(matrix);
 //        ExecutorService executorService = Executors.newFixedThreadPool(matrixSize);
+//        MatrixThread thread = new MatrixThread(i, Randomizer.generateNumber(threadsPerPhase),
+//                Randomizer.generateNumber(threadsPerPhase), Randomizer.generateBoolean());
 
-        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrixSize);
+
+        MatrixThread[] threads = new MatrixThread[matrixSize * 3];
+        for (int i = 0; i < threads.length; i++) {
+            MatrixThread thread = new MatrixThread(i, Randomizer.generateNumber(matrixSize),
+                Randomizer.generateNumber(matrixSize), Randomizer.generateBoolean());
+            threads[i] = thread;
+        }
+
+        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrixSize, threads);
         matrixThreadExecutor.run();
 
 //        for (Future<Integer> future : list) {

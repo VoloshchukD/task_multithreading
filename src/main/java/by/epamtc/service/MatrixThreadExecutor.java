@@ -1,40 +1,37 @@
 package by.epamtc.service;
 
 import by.epamtc.service.thread.MatrixThread;
-import by.epamtc.util.Randomizer;
+import by.epamtc.service.thread.WriterThread;
 
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
 public class MatrixThreadExecutor {
 
-    private int threadsAmount;
+    private int threadsPerPhase;
+
+    private MatrixThread[] threads;
 
     private ExecutorService executorService;
 
-    private CyclicBarrier barrier;
-
-    public MatrixThreadExecutor(int threadsAmount) {
-        this.threadsAmount = threadsAmount;
-        this.executorService = Executors.newFixedThreadPool(threadsAmount);
-        this.barrier = new CyclicBarrier(threadsAmount);
+    public MatrixThreadExecutor(int threadsPerPhase, MatrixThread[] threads) {
+        this.threadsPerPhase = threadsPerPhase;
+        this.threads = threads;
+        this.executorService = Executors.newFixedThreadPool(threadsPerPhase);
     }
 
-    public ArrayList<Future<Integer>> run() throws ExecutionException, InterruptedException {
-        ArrayList<Future<Integer>> list = new ArrayList<>();
-        for (int i = 1; i <= threadsAmount; i++) {
-            MatrixThread thread = new MatrixThread(i, Randomizer.generateNumber(threadsAmount),
-                    Randomizer.generateNumber(threadsAmount), Randomizer.generateBoolean());
-            Future<Integer> future = executorService.submit(thread);
-            list.add(future);
+    public void run() throws InterruptedException {
+        for (int i = 0; i < (threads.length / threadsPerPhase); i++) {
+            ArrayList<Future<Integer>> list = new ArrayList<>();
+            WriterThread writerThread = new WriterThread(list);
+            CyclicBarrier barrier = new CyclicBarrier(threadsPerPhase, writerThread);
+            for (int j = 0; j < threadsPerPhase; j++) {
+                threads[j].setBarrier(barrier);
+                Future<Integer> future = executorService.submit(threads[j]);
+                list.add(future);
+            }
+            writerThread.join();
         }
-        executorService.shutdown();
-
-        for (Future<Integer> future : list) {
-            System.out.println(future.get() + " result fixed");
-        }
-
-        return list;
     }
 
 }
