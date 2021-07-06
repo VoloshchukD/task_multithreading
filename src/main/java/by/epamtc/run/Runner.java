@@ -4,12 +4,41 @@ import by.epamtc.entity.Element;
 import by.epamtc.entity.Matrix;
 import by.epamtc.service.MatrixThreadExecutor;
 import by.epamtc.service.thread.MatrixThread;
-import by.epamtc.util.Randomizer;
 
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Runner {
-    public static void main(String[] args) throws ExecutionException, InterruptedException, BrokenBarrierException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+//        int matrixSize = 4;
+//        Matrix matrix = Matrix.getInstance();
+//
+//        Element[][] elements = new Element[matrixSize][matrixSize];
+//        for (int i = 0; i < matrixSize; i++) {
+//            for (int j = 0; j < matrixSize; j++) {
+//                elements[i][j] = new Element();
+//            }
+//        }
+//        matrix.setValues(elements);
+//
+//        ArrayList<Future<Integer>> list = new ArrayList<>();
+//        ExecutorService es = Executors.newFixedThreadPool(matrixSize);
+//        for (int i = 1; i <= 4; i++) {
+//            MatrixThread mt = new MatrixThread(i, random(matrixSize-1), random(matrixSize-1), true);
+//            mt.setMatrix(matrix);
+//            list.add(es.submit(mt));
+//
+//        }
+//        es.shutdown();
+//        for (Future<Integer> future : list) {
+//            System.out.println(future.get() + " result fixed");
+//        }
+
+
+
         int matrixSize = 4;
         Matrix matrix = Matrix.getInstance();
 
@@ -19,34 +48,21 @@ public class Runner {
                 elements[i][j] = new Element();
             }
         }
-
         matrix.setValues(elements);
-
-//        MatrixAction matrixAction = new MatrixAction(matrix, 1,
-//                2, false);
-//        MatrixThread matrixThread = new MatrixThread(matrixAction);
-//        System.out.println(matrix);
-//        ExecutorService executorService = Executors.newFixedThreadPool(matrixSize);
-//        MatrixThread thread = new MatrixThread(i, Randomizer.generateNumber(threadsPerPhase),
-//                Randomizer.generateNumber(threadsPerPhase), Randomizer.generateBoolean());
-
 
         MatrixThread[] threads = new MatrixThread[matrixSize * 3];
         for (int i = 0; i < threads.length; i++) {
-            MatrixThread thread = new MatrixThread(i, Randomizer.generateNumber(matrixSize),
-                Randomizer.generateNumber(matrixSize), Randomizer.generateBoolean());
+            MatrixThread thread = new MatrixThread(i, 1,1, true);
             threads[i] = thread;
         }
 
-        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrixSize, threads);
+        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix, matrixSize, threads);
         matrixThreadExecutor.run();
 
-//        for (Future<Integer> future : list) {
-//            System.out.println(future.get() + " result fixed");
-//        }
-
-//        CyclicBarrier barrier = new CyclicBarrier(matrixSize);
-//        barrier.await();
-
     }
+
+    public static int random(int upperBorder) {
+        return 0 + (int) (Math.random() * upperBorder);
+    }
+
 }

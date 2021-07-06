@@ -1,13 +1,17 @@
 package by.epamtc.entity;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+@XmlRootElement(name = "matrix")
 public class Matrix {
 
     private static Matrix instance;
 
+    @XmlElement(name = "values")
     private Element[][] values;
 
     private static Lock lock = new ReentrantLock();

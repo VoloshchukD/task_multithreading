@@ -17,6 +17,29 @@ public class MatrixThread implements Callable<Integer> {
 
     private CyclicBarrier barrier;
 
+    public MatrixThread(int threadId, int diagonalIndex, int mutableIndex, boolean isRowMutableIndex) {
+        this.threadId = threadId;
+        this.diagonalIndex = diagonalIndex;
+        this.mutableIndex = mutableIndex;
+        this.isRowMutableIndex = isRowMutableIndex;
+    }
+
+    public Matrix getMatrix() {
+        return matrix;
+    }
+
+    public void setMatrix(Matrix matrix) {
+        this.matrix = matrix;
+    }
+
+    public int getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(int threadId) {
+        this.threadId = threadId;
+    }
+
     public CyclicBarrier getBarrier() {
         return barrier;
     }
@@ -26,22 +49,15 @@ public class MatrixThread implements Callable<Integer> {
     }
 
     private boolean isRowMutableIndex;
-    public MatrixThread(int threadId, int diagonalIndex, int mutableIndex, boolean isRowMutableIndex) {
-        this.matrix = Matrix.getInstance();
-        this.threadId = threadId;
-        this.diagonalIndex = diagonalIndex;
-        this.mutableIndex = mutableIndex;
-        this.isRowMutableIndex = isRowMutableIndex;
-    }
 
     @Override
     public Integer call() throws Exception {
         Thread.currentThread().setName((Integer.toString(threadId)));
-        System.out.println("Start "  + Thread.currentThread().getName());
+        System.out.println("Start " + Thread.currentThread().getName());
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
-        System.out.println("End "  + Thread.currentThread().getName());
+        System.out.println("End " + Thread.currentThread().getName());
         matrix.getElement(diagonalIndex, diagonalIndex).unlock();
         barrier.await();
         return resultSum;
