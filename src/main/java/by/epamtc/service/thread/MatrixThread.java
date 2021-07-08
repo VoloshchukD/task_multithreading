@@ -1,5 +1,6 @@
 package by.epamtc.service.thread;
 
+import by.epamtc.entity.EditData;
 import by.epamtc.entity.Matrix;
 
 import java.util.concurrent.Callable;
@@ -11,44 +12,16 @@ public class MatrixThread implements Callable<Integer> {
 
     private Matrix matrix;
 
-    private int diagonalIndex;
-
-    private int mutableIndex;
+    private EditData editData;
 
     private CyclicBarrier barrier;
 
-    public MatrixThread(int threadId, int diagonalIndex, int mutableIndex, boolean isRowMutableIndex) {
+    public MatrixThread(int threadId, Matrix matrix, EditData editData, CyclicBarrier barrier) {
         this.threadId = threadId;
-        this.diagonalIndex = diagonalIndex;
-        this.mutableIndex = mutableIndex;
-        this.isRowMutableIndex = isRowMutableIndex;
-    }
-
-    public Matrix getMatrix() {
-        return matrix;
-    }
-
-    public void setMatrix(Matrix matrix) {
         this.matrix = matrix;
-    }
-
-    public int getThreadId() {
-        return threadId;
-    }
-
-    public void setThreadId(int threadId) {
-        this.threadId = threadId;
-    }
-
-    public CyclicBarrier getBarrier() {
-        return barrier;
-    }
-
-    public void setBarrier(CyclicBarrier barrier) {
+        this.editData = editData;
         this.barrier = barrier;
     }
-
-    private boolean isRowMutableIndex;
 
     @Override
     public Integer call() throws Exception {
@@ -58,22 +31,22 @@ public class MatrixThread implements Callable<Integer> {
         editElement();
         int resultSum = countSum();
         System.out.println("End " + Thread.currentThread().getName());
-        matrix.getElement(diagonalIndex, diagonalIndex).unlock();
+        matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex()).unlock();
         barrier.await();
         return resultSum;
     }
 
     private void addDiagonalElement() {
-        matrix.getElement(diagonalIndex, diagonalIndex).changeValue(threadId);
+        matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex()).changeValue(threadId);
     }
 
     private void editElement() {
-        int rowIndex = diagonalIndex;
-        int columnIndex = diagonalIndex;
-        if (isRowMutableIndex) {
-            rowIndex = mutableIndex;
+        int rowIndex = editData.getDiagonalIndex();
+        int columnIndex = editData.getDiagonalIndex();
+        if (editData.isRowMutable()) {
+            rowIndex = editData.getMutableIndex();
         } else {
-            columnIndex = mutableIndex;
+            columnIndex = editData.getMutableIndex();
         }
         matrix.getElement(rowIndex, columnIndex).changeValue(threadId);
     }
@@ -81,12 +54,12 @@ public class MatrixThread implements Callable<Integer> {
     private int countSum() {
         int sum = 0;
         for (int i = 0; i < matrix.size(); i++) {
-            if (i != diagonalIndex) {
-                sum += matrix.getElement(i, diagonalIndex).getValue();
-                sum += matrix.getElement(diagonalIndex, i).getValue();
+            if (i != editData.getDiagonalIndex()) {
+                sum += matrix.getElement(i, editData.getDiagonalIndex()).getValue();
+                sum += matrix.getElement(editData.getDiagonalIndex(), i).getValue();
             }
         }
-        sum += matrix.getElement(diagonalIndex, diagonalIndex).getValue();
+        sum += matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex()).getValue();
         return sum;
     }
 

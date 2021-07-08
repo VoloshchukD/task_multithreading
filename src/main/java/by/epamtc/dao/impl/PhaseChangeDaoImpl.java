@@ -1,13 +1,13 @@
 package by.epamtc.dao.impl;
 
-import by.epamtc.dao.MatrixChangeDao;
+import by.epamtc.dao.PhaseChangeDao;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class MatrixChangeDaoImpl implements MatrixChangeDao {
+public class PhaseChangeDaoImpl implements PhaseChangeDao {
 
     public static final String FILE_NAME = "data/result.txt";
 

@@ -1,5 +1,6 @@
 package by.epamtc.run;
 
+import by.epamtc.entity.EditData;
 import by.epamtc.entity.Element;
 import by.epamtc.entity.Matrix;
 import by.epamtc.service.MatrixThreadExecutor;
@@ -50,13 +51,16 @@ public class Runner {
         }
         matrix.setValues(elements);
 
-        MatrixThread[] threads = new MatrixThread[matrixSize * 3];
-        for (int i = 0; i < threads.length; i++) {
-            MatrixThread thread = new MatrixThread(i, 1,1, true);
-            threads[i] = thread;
+        EditData[] editData = new EditData[matrixSize * 3];
+        for (int i = 0; i < editData.length; i++) {
+            EditData data = new EditData();
+            data.setMutableIndex(random(matrix.size()));
+            data.setDiagonalIndex(random(matrix.size()));
+            data.setRowMutable(random(1) == 1);
+            editData[i] = data;
         }
 
-        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix, matrixSize, threads);
+        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix, editData, matrix.size());
         matrixThreadExecutor.run();
 
     }
