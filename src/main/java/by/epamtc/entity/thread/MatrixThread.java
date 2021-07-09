@@ -1,4 +1,4 @@
-package by.epamtc.service.thread;
+package by.epamtc.entity.thread;
 
 import by.epamtc.entity.EditData;
 import by.epamtc.entity.Matrix;
@@ -8,58 +8,61 @@ import java.util.concurrent.CyclicBarrier;
 
 public class MatrixThread implements Callable<Integer> {
 
-    private int threadId;
-
     private Matrix matrix;
 
     private EditData editData;
 
     private CyclicBarrier barrier;
 
-    public MatrixThread(int threadId, Matrix matrix, EditData editData, CyclicBarrier barrier) {
-        this.threadId = threadId;
+    public MatrixThread(Matrix matrix, EditData editData, CyclicBarrier barrier) {
         this.matrix = matrix;
         this.editData = editData;
         this.barrier = barrier;
     }
 
+    public int getThreadId() {
+        return editData.getThreadId();
+    }
+
     @Override
     public Integer call() throws Exception {
-        Thread.currentThread().setName((Integer.toString(threadId)));
+        Thread.currentThread().setName((Integer.toString(editData.getThreadId())));
+        matrix.lock();
         System.out.println("Start " + Thread.currentThread().getName());
+        System.out.println(editData);
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
         System.out.println("End " + Thread.currentThread().getName());
-        matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex()).unlock();
+        matrix.unlock();
         barrier.await();
         return resultSum;
     }
 
-    private void addDiagonalElement() {
-        matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex()).changeValue(threadId);
+    private void addDiagonalElement() throws InterruptedException {
+        matrix.changeValue(editData.getDiagonalIndex(), editData.getDiagonalIndex(), editData.getThreadId());
     }
 
-    private void editElement() {
+    private void editElement() throws InterruptedException {
         int rowIndex = editData.getDiagonalIndex();
         int columnIndex = editData.getDiagonalIndex();
         if (editData.isRowMutable()) {
-            rowIndex = editData.getMutableIndex();
-        } else {
             columnIndex = editData.getMutableIndex();
+        } else {
+            rowIndex = editData.getMutableIndex();
         }
-        matrix.getElement(rowIndex, columnIndex).changeValue(threadId);
+        matrix.changeValue(rowIndex, columnIndex, editData.getNewElement());
     }
 
-    private int countSum() {
+    private int countSum() throws InterruptedException {
         int sum = 0;
         for (int i = 0; i < matrix.size(); i++) {
             if (i != editData.getDiagonalIndex()) {
-                sum += matrix.getElement(i, editData.getDiagonalIndex()).getValue();
-                sum += matrix.getElement(editData.getDiagonalIndex(), i).getValue();
+                sum += matrix.getElement(i, editData.getDiagonalIndex());
+                sum += matrix.getElement(editData.getDiagonalIndex(), i);
             }
         }
-        sum += matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex()).getValue();
+        sum += matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex());
         return sum;
     }
 

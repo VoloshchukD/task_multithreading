@@ -1,16 +1,17 @@
 package by.epamtc.service;
 
-import by.epamtc.dao.impl.PhaseChangeDaoImpl;
 import by.epamtc.dao.impl.MatrixDaoImpl;
 import by.epamtc.entity.EditData;
 import by.epamtc.entity.Matrix;
-import by.epamtc.service.thread.MatrixThread;
+import by.epamtc.entity.thread.MatrixThread;
 
 import javax.xml.bind.JAXBException;
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MatrixThreadExecutor {
 
@@ -38,11 +39,11 @@ public class MatrixThreadExecutor {
             Map<Integer, Future<Integer>> map = new LinkedHashMap<>();
             CyclicBarrier barrier = new CyclicBarrier(editsPerPhase);
             for (int j = 0; j < editsPerPhase; j++, currentThreadIndex++) {
-                MatrixThread matrixThread = new MatrixThread(j + 1, matrix, editData[currentThreadIndex], barrier);
+                MatrixThread matrixThread = new MatrixThread(matrix, editData[currentThreadIndex], barrier);
                 Future<Integer> future = executorService.submit(matrixThread);
-                map.put(j + 1, future);
+                map.put(matrixThread.getThreadId(), future);
             }
-            saveMatrix(matrix);
+//            saveMatrix(matrix);
             phaseWriter.writeResult(matrix, map);
         }
 

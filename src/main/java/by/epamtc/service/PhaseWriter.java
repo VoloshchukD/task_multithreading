@@ -1,13 +1,11 @@
 package by.epamtc.service;
 
 import by.epamtc.dao.impl.PhaseChangeDaoImpl;
-import by.epamtc.entity.Element;
 import by.epamtc.entity.Matrix;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -68,13 +66,13 @@ public class PhaseWriter {
     private String prepareData(Matrix matrix, Map<Integer, Future<Integer>> data) {
         StringBuilder stringBuilder = new StringBuilder(PHASE_TEXT);
         stringBuilder.append("\n");
-        stringBuilder.append(matrix);
         try {
             for (Map.Entry<Integer, Future<Integer>> entry : data.entrySet()) {
                 stringBuilder.append(THREAD_TEXT).append(entry.getKey()).append(TEXT_SEPARATOR);
                 stringBuilder.append(SUM_TEXT).append(entry.getValue().get());
                 stringBuilder.append("\n");
             }
+            stringBuilder.append(matrix);
             stringBuilder.append("\n");
         } catch (ExecutionException | InterruptedException e) {
             logger.log(Level.ERROR, e.getMessage());

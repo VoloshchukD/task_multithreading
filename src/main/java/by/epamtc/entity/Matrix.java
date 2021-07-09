@@ -1,46 +1,31 @@
 package by.epamtc.entity;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.Semaphore;
 
-@XmlRootElement(name = "matrix")
 public class Matrix {
 
-    private static Matrix instance;
+    private int[][] values;
 
-    @XmlElement(name = "values")
-    private Element[][] values;
+    private final Semaphore semaphore = new Semaphore(1, true);
 
-    private static Lock lock = new ReentrantLock();
-
-    private static AtomicBoolean created = new AtomicBoolean(false);
-
-    private Matrix() {
-    }
-
-    public static Matrix getInstance() {
-        if (!created.get()) {
-            try {
-                lock.lock();
-                if (instance == null) {
-                    instance = new Matrix();
-                    created.set(true);
-                }
-            } finally {
-                lock.unlock();
-            }
-        }
-        return instance;
-    }
-
-    public void setValues(Element[][] values) {
+    public Matrix(int[][] values) {
         this.values = values;
     }
 
-    public Element getElement(int rowIndex, int columnIndex) {
+    public void lock() throws InterruptedException {
+        semaphore.acquire();
+    }
+
+    public void changeValue(int rowIndex, int columnIndex, int value) throws InterruptedException {
+            values[rowIndex][columnIndex] = value;
+            System.out.println("Thread "+Thread.currentThread().getName() + " changed");
+    }
+
+    public void unlock() {
+        semaphore.release();
+    }
+
+    public int getElement(int rowIndex, int columnIndex) throws InterruptedException {
         return values[rowIndex][columnIndex];
     }
 
@@ -52,8 +37,8 @@ public class Matrix {
     public String toString() {
         StringBuilder stringValue = new StringBuilder(getClass().getName());
         stringValue.append("\n");
-        for (Element[] rowValues : values) {
-            for (Element value : rowValues) {
+        for (int[] rowValues : values) {
+            for (int value : rowValues) {
                 stringValue.append(value);
                 stringValue.append("  ");
             }

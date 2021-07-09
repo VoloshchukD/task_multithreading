@@ -6,7 +6,7 @@ import javax.xml.bind.JAXBException;
 
 public interface MatrixDao {
 
-   Matrix readMatrix();
+   Matrix readMatrix() throws JAXBException;
 
    void writeMatrix(Matrix matrix) throws JAXBException;
 

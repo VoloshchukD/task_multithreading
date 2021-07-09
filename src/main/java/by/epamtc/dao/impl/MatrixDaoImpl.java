@@ -6,6 +6,7 @@ import by.epamtc.entity.Matrix;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
 public class MatrixDaoImpl implements MatrixDao {
@@ -13,8 +14,12 @@ public class MatrixDaoImpl implements MatrixDao {
     public static final String FILE_NAME = "data/matrix.xml";
 
     @Override
-    public Matrix readMatrix() {
-        return null;
+    public Matrix readMatrix() throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Matrix.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        File file = new File(FILE_NAME);
+        Matrix matrix = (Matrix) jaxbUnmarshaller.unmarshal(file);
+        return matrix;
     }
 
     @Override
