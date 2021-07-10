@@ -1,7 +1,7 @@
-package by.epamtc.entity.thread;
+package by.epamtc.variant1.entity.thread;
 
-import by.epamtc.entity.EditData;
-import by.epamtc.entity.Matrix;
+import by.epamtc.variant1.entity.EditData;
+import by.epamtc.variant1.entity.Matrix;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;

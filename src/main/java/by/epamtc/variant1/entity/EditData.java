@@ -1,6 +1,8 @@
-package by.epamtc.entity;
+package by.epamtc.variant1.entity;
 
-public class EditData {
+import java.io.Serializable;
+
+public class EditData implements Serializable {
 
     private int threadId;
 

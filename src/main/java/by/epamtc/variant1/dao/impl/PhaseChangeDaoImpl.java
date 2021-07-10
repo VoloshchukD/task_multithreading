@@ -1,6 +1,6 @@
-package by.epamtc.dao.impl;
+package by.epamtc.variant1.dao.impl;
 
-import by.epamtc.dao.PhaseChangeDao;
+import by.epamtc.variant1.dao.PhaseChangeDao;
 
 import java.io.BufferedWriter;
 import java.io.File;

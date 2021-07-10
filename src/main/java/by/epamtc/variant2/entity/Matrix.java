@@ -1,31 +1,21 @@
-package by.epamtc.entity;
+package by.epamtc.variant2.entity;
 
-import java.util.concurrent.Semaphore;
+import java.io.Serializable;
 
-public class Matrix {
+public class Matrix implements Serializable {
 
     private int[][] values;
-
-    private final Semaphore semaphore = new Semaphore(1, true);
 
     public Matrix(int[][] values) {
         this.values = values;
     }
 
-    public void lock() throws InterruptedException {
-        semaphore.acquire();
-    }
-
-    public void changeValue(int rowIndex, int columnIndex, int value) throws InterruptedException {
+    public void changeValue(int rowIndex, int columnIndex, int value) {
             values[rowIndex][columnIndex] = value;
             System.out.println("Thread "+Thread.currentThread().getName() + " changed");
     }
 
-    public void unlock() {
-        semaphore.release();
-    }
-
-    public int getElement(int rowIndex, int columnIndex) throws InterruptedException {
+    public int getElement(int rowIndex, int columnIndex) {
         return values[rowIndex][columnIndex];
     }
 

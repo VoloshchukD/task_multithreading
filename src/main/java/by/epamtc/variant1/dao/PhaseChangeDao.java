@@ -1,4 +1,4 @@
-package by.epamtc.dao;
+package by.epamtc.variant1.dao;
 
 import java.io.IOException;
 

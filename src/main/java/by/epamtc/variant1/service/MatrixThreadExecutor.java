@@ -1,11 +1,11 @@
-package by.epamtc.service;
+package by.epamtc.variant1.service;
 
-import by.epamtc.dao.impl.MatrixDaoImpl;
-import by.epamtc.entity.EditData;
-import by.epamtc.entity.Matrix;
-import by.epamtc.entity.thread.MatrixThread;
+import by.epamtc.variant1.dao.impl.MatrixDaoImpl;
+import by.epamtc.variant1.entity.EditData;
+import by.epamtc.variant1.entity.Matrix;
+import by.epamtc.variant1.entity.thread.MatrixThread;
 
-import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CyclicBarrier;
@@ -43,7 +43,7 @@ public class MatrixThreadExecutor {
                 Future<Integer> future = executorService.submit(matrixThread);
                 map.put(matrixThread.getThreadId(), future);
             }
-//            saveMatrix(matrix);
+            saveMatrix(matrix);
             phaseWriter.writeResult(matrix, map);
         }
 
@@ -53,7 +53,7 @@ public class MatrixThreadExecutor {
         MatrixDaoImpl matrixDao = new MatrixDaoImpl();
         try {
             matrixDao.writeMatrix(matrix);
-        } catch (JAXBException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
