@@ -1,8 +1,5 @@
 package by.epamtc.variant2.entity;
 
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
 public class CustomBarrier {
 
     private int threadLimit;
@@ -18,8 +15,6 @@ public class CustomBarrier {
         if (threadLimit == threadsReached) {
             notifyAll();
         } else {
-            System.out.println("-------------reached " + Thread.currentThread().getName());
-
             wait();
         }
     }

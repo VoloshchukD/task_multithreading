@@ -8,10 +8,7 @@ import by.epamtc.variant1.entity.thread.MatrixThread;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class MatrixThreadExecutor {
 
@@ -33,20 +30,22 @@ public class MatrixThreadExecutor {
         phaseWriter = PhaseWriter.getInstance();
     }
 
-    public void run() {
+    public void run() throws InterruptedException {
         int currentThreadIndex = 0;
+        CyclicBarrier barrier = new CyclicBarrier(editsPerPhase);
         for (int i = 0; i < (editData.length / editsPerPhase); i++) {
             Map<Integer, Future<Integer>> map = new LinkedHashMap<>();
-            CyclicBarrier barrier = new CyclicBarrier(editsPerPhase);
+
             for (int j = 0; j < editsPerPhase; j++, currentThreadIndex++) {
                 MatrixThread matrixThread = new MatrixThread(matrix, editData[currentThreadIndex], barrier);
                 Future<Integer> future = executorService.submit(matrixThread);
                 map.put(matrixThread.getThreadId(), future);
             }
-            saveMatrix(matrix);
+            barrier.reset();
             phaseWriter.writeResult(matrix, map);
         }
-
+        saveMatrix(matrix);
+        executorService.shutdown();
     }
 
     public void saveMatrix(Matrix matrix) {

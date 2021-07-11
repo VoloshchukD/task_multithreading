@@ -17,7 +17,7 @@ public class Matrix implements Serializable {
         semaphore.acquire();
     }
 
-    public void changeValue(int rowIndex, int columnIndex, int value) throws InterruptedException {
+    public void changeValue(int rowIndex, int columnIndex, int value) {
             values[rowIndex][columnIndex] = value;
             System.out.println("Thread "+Thread.currentThread().getName() + " changed");
     }
@@ -26,7 +26,7 @@ public class Matrix implements Serializable {
         semaphore.release();
     }
 
-    public int getElement(int rowIndex, int columnIndex) throws InterruptedException {
+    public int getElement(int rowIndex, int columnIndex) {
         return values[rowIndex][columnIndex];
     }
 
