@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class PhaseChangeDaoImpl implements PhaseChangeDao {
 
-    public static final String FILE_NAME = "data/result.txt";
+    public static final String FILE_NAME = "data/variant1/result.txt";
 
     @Override
     public void writeMatrixChange(String text) throws IOException {

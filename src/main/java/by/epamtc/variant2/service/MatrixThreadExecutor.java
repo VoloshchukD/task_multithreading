@@ -38,27 +38,11 @@ public class MatrixThreadExecutor {
             }
             System.out.println(proxyMatrix.toString());
             System.out.println(proxyMatrix.getSumResult());
+
+            PhaseWriter phaseWriter = PhaseWriter.getInstance();
+            phaseWriter.writeResult(proxyMatrix.getMatrix(), proxyMatrix.getSumResult());
             proxyMatrix.resetSumResult();
         }
     }
-
-
-//    public void run() {
-//        int currentThreadIndex = 0;
-//        for (int i = 0; i < (editData.length / editsPerPhase); i++) {
-//            Map<Integer, Future<Integer>> map = new LinkedHashMap<>();
-//            CyclicBarrier barrier = new CyclicBarrier(editsPerPhase);
-//            for (int j = 0; j < editsPerPhase; j++, currentThreadIndex++) {
-//                MatrixThread matrixThread = new MatrixThread(matrix, editData[currentThreadIndex], barrier);
-//                Future<Integer> future = executorService.submit(matrixThread);
-//                map.put(matrixThread.getThreadId(), future);
-//            }
-//            saveMatrix(matrix);
-//            phaseWriter.writeResult(matrix, map);
-//        }
-//
-//    }
-
-
 
 }

@@ -37,4 +37,9 @@ public class Matrix implements Serializable {
         return stringValue.toString();
     }
 
+    @Override
+    protected Object clone() {
+        return new Matrix(values);
+    }
+
 }

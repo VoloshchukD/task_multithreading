@@ -1,16 +1,35 @@
-package by.epamtc.variant1.dao.impl;
+package by.epamtc.variant2.dao.impl;
 
-import by.epamtc.variant1.dao.MatrixDao;
-import by.epamtc.variant1.entity.Matrix;
+import by.epamtc.variant2.entity.Matrix;
+import by.epamtc.variant2.dao.MatrixDao;
 
 import java.io.*;
 
 public class MatrixDaoImpl implements MatrixDao {
 
-    public static final String FILE_NAME = "data/variant1/matrix.txt";
+    private static MatrixDaoImpl instance;
+
+    private static volatile boolean created = false;
+
+    public static final String FILE_NAME = "data/variant2/matrix.txt";
+
+    private MatrixDaoImpl() {
+    }
+
+    public static MatrixDaoImpl getInstance() {
+        if (!created) {
+            synchronized (MatrixDaoImpl.class) {
+                if (instance == null) {
+                    instance = new MatrixDaoImpl();
+                    created = true;
+                }
+            }
+        }
+        return instance;
+    }
 
     @Override
-    public Matrix readMatrix() throws IOException, ClassNotFoundException {
+    public synchronized Matrix readMatrix() throws IOException, ClassNotFoundException {
         ObjectInputStream objectInputStream = null;
         Matrix matrix = null;
         try {
@@ -26,7 +45,7 @@ public class MatrixDaoImpl implements MatrixDao {
     }
 
     @Override
-    public void writeMatrix(Matrix matrix) throws IOException {
+    public synchronized void writeMatrix(Matrix matrix) throws IOException {
         ObjectOutputStream objectOutputStream = null;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);

@@ -13,6 +13,10 @@ public class ProxyMatrix {
         this.matrix = matrix;
     }
 
+    public Matrix getMatrix() {
+        return (Matrix) matrix.clone();
+    }
+
     public int getSize() {
         return matrix.size();
     }
