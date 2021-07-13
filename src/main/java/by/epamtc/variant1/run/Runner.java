@@ -8,10 +8,11 @@ import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.service.MatrixThreadExecutor;
 
+import java.io.IOException;
 
 public class Runner {
     public static void main(String[] args) {
-        MatrixDao matrixDao = new MatrixDaoImpl();
+        MatrixDao matrixDao = MatrixDaoImpl.getInstance();
         int matrixSize = 4;
         int[][] values = new int[matrixSize][matrixSize];
         for (int i = 0; i < matrixSize; i++) {
@@ -26,7 +27,7 @@ public class Runner {
 //            e.printStackTrace();
 //        }
         System.out.println("read " + matrix);
-        EditDataDao editDataDao = new EditDataDaoImpl();
+        EditDataDao editDataDao = EditDataDaoImpl.getInstance();
         EditData[] editData = new EditData[matrix.size() * 3];
 //        try {
 //            editData = editDataDao.readAllEditData(editData.length);
@@ -58,6 +59,17 @@ public class Runner {
             e.printStackTrace();
         }
 
+        saveMatrix(matrix);
+
+    }
+
+    public static void saveMatrix(Matrix matrix) {
+        MatrixDao matrixDao = MatrixDaoImpl.getInstance();
+        try {
+            matrixDao.writeMatrix(matrix);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static int random(int upperBorder) {

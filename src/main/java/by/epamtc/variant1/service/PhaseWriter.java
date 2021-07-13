@@ -1,5 +1,6 @@
 package by.epamtc.variant1.service;
 
+import by.epamtc.variant1.dao.PhaseChangeDao;
 import by.epamtc.variant1.dao.impl.PhaseChangeDaoImpl;
 import by.epamtc.variant1.entity.Matrix;
 import org.apache.logging.log4j.Level;
@@ -16,12 +17,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class PhaseWriter {
 
-    private static PhaseWriter instance;
-
-    private static Lock lock = new ReentrantLock();
-
-    private static AtomicBoolean created = new AtomicBoolean(false);
-
     private static final Logger logger = LogManager.getLogger();
 
     private static final String PHASE_TEXT = "////PHASE////";
@@ -32,35 +27,18 @@ public class PhaseWriter {
 
     private static final String SUM_TEXT = "result sum = ";
 
-    private PhaseWriter() {
-    }
-
-    public static PhaseWriter getInstance() {
-        if (!created.get()) {
-            try {
-                lock.lock();
-                if (instance == null) {
-                    instance = new PhaseWriter();
-                    created.set(true);
-                }
-            } finally {
-                lock.unlock();
-            }
-        }
-        return instance;
+    public PhaseWriter() {
     }
 
     public void writeResult(Matrix matrix, Map<Integer, Future<Integer>> data) {
-        lock.lock();
         String result = prepareData(matrix, data);
-        PhaseChangeDaoImpl matrixChangeDao = new PhaseChangeDaoImpl();
+        PhaseChangeDao matrixChangeDao = PhaseChangeDaoImpl.getInstance();
         try {
             matrixChangeDao.writeMatrixChange(result);
         } catch (IOException e) {
             logger.log(Level.ERROR, e.getMessage());
         }
         System.out.println("///////////////PHASEEEE/////////////");
-        lock.unlock();
     }
 
     private String prepareData(Matrix matrix, Map<Integer, Future<Integer>> data) {

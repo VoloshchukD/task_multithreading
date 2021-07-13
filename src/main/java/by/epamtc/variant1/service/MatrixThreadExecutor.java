@@ -27,7 +27,7 @@ public class MatrixThreadExecutor {
         this.editData = editData;
         this.editsPerPhase = editsPerPhase;
         this.executorService = Executors.newFixedThreadPool(editsPerPhase);
-        phaseWriter = PhaseWriter.getInstance();
+        phaseWriter = new PhaseWriter();
     }
 
     public void run() throws InterruptedException {
@@ -44,17 +44,7 @@ public class MatrixThreadExecutor {
             barrier.reset();
             phaseWriter.writeResult(matrix, map);
         }
-        saveMatrix(matrix);
         executorService.shutdown();
-    }
-
-    public void saveMatrix(Matrix matrix) {
-        MatrixDaoImpl matrixDao = new MatrixDaoImpl();
-        try {
-            matrixDao.writeMatrix(matrix);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
