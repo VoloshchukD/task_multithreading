@@ -6,9 +6,8 @@ import by.epamtc.variant2.dao.impl.EditDataDaoImpl;
 import by.epamtc.variant2.dao.impl.MatrixDaoImpl;
 import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.entity.Matrix;
+import by.epamtc.variant2.exception.DaoException;
 import by.epamtc.variant2.service.MatrixThreadExecutor;
-
-import java.io.IOException;
 
 public class Runner {
     public static void main(String[] args) {
@@ -32,9 +31,7 @@ public class Runner {
         Matrix matrix = null;
         try {
             matrix = matrixDao.readMatrix();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (DaoException e) {
             e.printStackTrace();
         }
 
@@ -61,9 +58,7 @@ public class Runner {
         EditData[] editData = new EditData[matrix.size() * 3] ;
         try {
             editData = editDataDao.readAllEditData(matrix.size() * 3);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (DaoException e) {
             e.printStackTrace();
         }
 

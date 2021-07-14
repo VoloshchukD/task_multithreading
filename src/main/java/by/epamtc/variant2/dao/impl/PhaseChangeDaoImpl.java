@@ -1,5 +1,6 @@
 package by.epamtc.variant2.dao.impl;
 
+import by.epamtc.variant2.exception.DaoException;
 import by.epamtc.variant2.dao.PhaseChangeDao;
 
 import java.io.BufferedWriter;
@@ -31,22 +32,22 @@ public class PhaseChangeDaoImpl implements PhaseChangeDao {
     }
 
     @Override
-    public synchronized void writeMatrixChange(String text) throws IOException {
+    public synchronized void writeMatrixChange(String text) throws DaoException {
         File file = new File(FILE_NAME);
-        FileWriter fr = null;
-        BufferedWriter br = null;
+        BufferedWriter bufferedWriter = null;
         try {
-            fr = new FileWriter(file, true);
-            br = new BufferedWriter(fr);
-            br.write(text);
+            FileWriter fr = new FileWriter(file, true);
+            bufferedWriter = new BufferedWriter(fr);
+            bufferedWriter.write(text);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DaoException(e);
         } finally {
             try {
-                br.close();
-                fr.close();
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new DaoException(e);
             }
         }
     }

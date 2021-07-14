@@ -1,5 +1,6 @@
 package by.epamtc.variant2.dao.impl;
 
+import by.epamtc.variant2.exception.DaoException;
 import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.dao.MatrixDao;
 
@@ -29,31 +30,43 @@ public class MatrixDaoImpl implements MatrixDao {
     }
 
     @Override
-    public synchronized Matrix readMatrix() throws IOException, ClassNotFoundException {
+    public synchronized Matrix readMatrix() throws DaoException {
         ObjectInputStream objectInputStream = null;
         Matrix matrix = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             objectInputStream = new ObjectInputStream(fileInputStream);
             matrix = (Matrix) objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DaoException(e);
         } finally {
             if (objectInputStream != null) {
-                objectInputStream.close();
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
         }
         return matrix;
     }
 
     @Override
-    public synchronized void writeMatrix(Matrix matrix) throws IOException {
+    public synchronized void writeMatrix(Matrix matrix) throws DaoException {
         ObjectOutputStream objectOutputStream = null;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(matrix);
+        } catch (IOException e) {
+            throw new DaoException(e);
         } finally {
             if (objectOutputStream != null) {
-                objectOutputStream.close();
+                try {
+                    objectOutputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
         }
     }

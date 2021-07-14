@@ -2,6 +2,7 @@ package by.epamtc.variant1.dao.impl;
 
 import by.epamtc.variant1.dao.MatrixDao;
 import by.epamtc.variant1.entity.Matrix;
+import by.epamtc.variant1.exception.DaoException;
 
 import java.io.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,7 +41,7 @@ public class MatrixDaoImpl implements MatrixDao {
     }
 
     @Override
-    public Matrix readMatrix() throws IOException, ClassNotFoundException {
+    public Matrix readMatrix() throws DaoException {
         readWriteLock.readLock().lock();
         ObjectInputStream objectInputStream = null;
         Matrix matrix = null;
@@ -48,9 +49,15 @@ public class MatrixDaoImpl implements MatrixDao {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             objectInputStream = new ObjectInputStream(fileInputStream);
             matrix = (Matrix) objectInputStream.readObject();
+        }  catch (IOException | ClassNotFoundException e) {
+            throw new DaoException(e);
         } finally {
             if (objectInputStream != null) {
-                objectInputStream.close();
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
             readWriteLock.readLock().unlock();
         }
@@ -58,16 +65,22 @@ public class MatrixDaoImpl implements MatrixDao {
     }
 
     @Override
-    public void writeMatrix(Matrix matrix) throws IOException {
+    public void writeMatrix(Matrix matrix) throws DaoException {
         readWriteLock.writeLock().lock();
         ObjectOutputStream objectOutputStream = null;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(matrix);
+        } catch (IOException e) {
+            throw new DaoException(e);
         } finally {
             if (objectOutputStream != null) {
-                objectOutputStream.close();
+                try {
+                    objectOutputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
             readWriteLock.writeLock().unlock();
         }

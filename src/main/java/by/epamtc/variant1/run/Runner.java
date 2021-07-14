@@ -6,6 +6,7 @@ import by.epamtc.variant1.dao.impl.EditDataDaoImpl;
 import by.epamtc.variant1.dao.impl.MatrixDaoImpl;
 import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
+import by.epamtc.variant1.exception.DaoException;
 import by.epamtc.variant1.service.MatrixThreadExecutor;
 
 import java.io.IOException;
@@ -67,7 +68,7 @@ public class Runner {
         MatrixDao matrixDao = MatrixDaoImpl.getInstance();
         try {
             matrixDao.writeMatrix(matrix);
-        } catch (IOException e) {
+        } catch (DaoException e) {
             e.printStackTrace();
         }
     }

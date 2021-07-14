@@ -3,6 +3,7 @@ package by.epamtc.variant1.service;
 import by.epamtc.variant1.dao.PhaseChangeDao;
 import by.epamtc.variant1.dao.impl.PhaseChangeDaoImpl;
 import by.epamtc.variant1.entity.Matrix;
+import by.epamtc.variant1.exception.DaoException;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +36,7 @@ public class PhaseWriter {
         PhaseChangeDao matrixChangeDao = PhaseChangeDaoImpl.getInstance();
         try {
             matrixChangeDao.writeMatrixChange(result);
-        } catch (IOException e) {
+        } catch (DaoException e) {
             logger.log(Level.ERROR, e.getMessage());
         }
         System.out.println("///////////////PHASEEEE/////////////");

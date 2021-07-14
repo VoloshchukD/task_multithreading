@@ -1,17 +1,16 @@
 package by.epamtc.variant2.dao;
 
 import by.epamtc.variant2.entity.EditData;
-
-import java.io.IOException;
+import by.epamtc.variant2.exception.DaoException;
 
 public interface EditDataDao {
 
-    EditData readEditData() throws IOException, ClassNotFoundException;
+    EditData readEditData() throws DaoException;
 
-    EditData[] readAllEditData(int quantity) throws IOException, ClassNotFoundException;
+    EditData[] readAllEditData(int quantity) throws DaoException;
 
-    boolean writeEditData(EditData editData) throws IOException;
+    boolean writeEditData(EditData editData) throws DaoException;
 
-    boolean writeAllEditData(EditData[] editData) throws IOException;
+    boolean writeAllEditData(EditData[] editData) throws DaoException;
 
 }

@@ -1,5 +1,6 @@
 package by.epamtc.variant2.dao.impl;
 
+import by.epamtc.variant2.exception.DaoException;
 import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.dao.EditDataDao;
 
@@ -29,33 +30,51 @@ public class EditDataDaoImpl implements EditDataDao {
     }
 
     @Override
-    public synchronized EditData readEditData() throws IOException, ClassNotFoundException {
+    public synchronized EditData readEditData() throws DaoException {
         ObjectInputStream objectInputStream = null;
         EditData editData = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             objectInputStream = new ObjectInputStream(fileInputStream);
             editData = (EditData) objectInputStream.readObject();
+        } catch (ClassNotFoundException | IOException e) {
         } finally {
             if (objectInputStream != null) {
-                objectInputStream.close();
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
         }
         return editData;
     }
 
-    public synchronized EditData[] readAllEditData(int quantity) throws IOException, ClassNotFoundException {
+    public synchronized EditData[] readAllEditData(int quantity) throws DaoException {
         EditData[] editData = new EditData[quantity];
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+        ObjectInputStream objectInputStream = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
+            objectInputStream = new ObjectInputStream(fileInputStream);
             for (int i = 0; i < quantity; i++) {
-                editData[i] = (EditData) inputStream.readObject();
+                editData[i] = (EditData) objectInputStream.readObject();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DaoException(e);
+        } finally {
+            if (objectInputStream != null) {
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
         }
         return editData;
     }
 
     @Override
-    public synchronized boolean writeEditData(EditData editData) throws IOException {
+    public synchronized boolean writeEditData(EditData editData) throws DaoException {
         ObjectOutputStream objectOutputStream = null;
         boolean saved = false;
         try {
@@ -63,21 +82,40 @@ public class EditDataDaoImpl implements EditDataDao {
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(editData);
             saved = true;
+        } catch (IOException e) {
+            throw new DaoException(e);
         } finally {
             if (objectOutputStream != null) {
-                objectOutputStream.close();
+                try {
+                    objectOutputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
             }
         }
         return saved;
     }
 
-    public synchronized boolean writeAllEditData(EditData[] editData) throws IOException {
+    public synchronized boolean writeAllEditData(EditData[] editData) throws DaoException {
+        ObjectOutputStream objectOutputStream = null;
         boolean saved = false;
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
             for (int i = 0; i < editData.length; i++) {
-                outputStream.writeObject(editData[i]);
+                objectOutputStream.writeObject(editData[i]);
             }
             saved = true;
+        } catch (IOException e) {
+            throw new DaoException(e);
+        } finally {
+            if (objectOutputStream != null) {
+                try {
+                    objectOutputStream.close();
+                } catch (IOException e) {
+                    throw new DaoException(e);
+                }
+            }
         }
         return saved;
     }
