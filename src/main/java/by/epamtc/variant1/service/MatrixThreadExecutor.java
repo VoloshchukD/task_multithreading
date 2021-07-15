@@ -1,13 +1,11 @@
 package by.epamtc.variant1.service;
 
-import by.epamtc.variant1.dao.impl.MatrixDaoImpl;
 import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.entity.thread.MatrixThread;
+import by.epamtc.variant1.exception.ServiceException;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class MatrixThreadExecutor {
@@ -16,35 +14,49 @@ public class MatrixThreadExecutor {
 
     private Matrix matrix;
 
-    private EditData[] editData;
+    private Queue<EditData> editData;
 
-    private ExecutorService executorService;
-
-    private PhaseWriter phaseWriter;
-
-    public MatrixThreadExecutor(Matrix matrix,EditData[] editData, int editsPerPhase) {
+    public MatrixThreadExecutor(Matrix matrix, Queue<EditData> editData, int editsPerPhase) {
+        this.editsPerPhase = editsPerPhase;
         this.matrix = matrix;
         this.editData = editData;
-        this.editsPerPhase = editsPerPhase;
-        this.executorService = Executors.newFixedThreadPool(editsPerPhase);
-        phaseWriter = new PhaseWriter();
     }
 
-    public void run() throws InterruptedException {
-        int currentThreadIndex = 0;
-        CyclicBarrier barrier = new CyclicBarrier(editsPerPhase);
-        for (int i = 0; i < (editData.length / editsPerPhase); i++) {
-            Map<Integer, Future<Integer>> map = new LinkedHashMap<>();
-
-            for (int j = 0; j < editsPerPhase; j++, currentThreadIndex++) {
-                MatrixThread matrixThread = new MatrixThread(matrix, editData[currentThreadIndex], barrier);
-                Future<Integer> future = executorService.submit(matrixThread);
-                map.put(matrixThread.getThreadId(), future);
-            }
-            barrier.reset();
-            phaseWriter.writeResult(matrix, map);
+    public void execute() throws InterruptedException, ExecutionException, ServiceException {
+        int iterations = editData.size();
+        ExecutorService executorService = Executors.newFixedThreadPool(editsPerPhase);
+        for (int i = 0; i < (iterations / editsPerPhase); i++) {
+            List<MatrixThread> phaseThreads = initializePhaseThreads();
+            List<Future<Integer>> sumResults = executorService.invokeAll(phaseThreads);
+            writeResult(phaseThreads, sumResults);
         }
         executorService.shutdown();
+    }
+
+    private List<MatrixThread> initializePhaseThreads() {
+        ArrayList<MatrixThread> phaseThreads = new ArrayList<>();
+        for (int i = 0; i < editsPerPhase; i++) {
+            MatrixThread matrixThread = new MatrixThread(matrix, editData.poll());
+            phaseThreads.add(matrixThread);
+        }
+        phaseThreads.trimToSize();
+        return phaseThreads;
+    }
+
+    private void writeResult(List<MatrixThread> phaseThreads, List<Future<Integer>> sumResults)
+            throws ExecutionException, InterruptedException, ServiceException {
+        Map<Integer, Integer> result = prepareData(phaseThreads, sumResults);
+        PhaseWriter phaseWriter = new PhaseWriter();
+        phaseWriter.writeResult(matrix, result);
+    }
+
+    private Map<Integer, Integer> prepareData(List<MatrixThread> phaseThreads, List<Future<Integer>> sumResults)
+            throws ExecutionException, InterruptedException {
+        Map<Integer, Integer> data = new LinkedHashMap<>();
+        for (int i = 0; i < phaseThreads.size(); i++) {
+            data.put(phaseThreads.get(i).getThreadId(), sumResults.get(i).get());
+        }
+        return data;
     }
 
 }

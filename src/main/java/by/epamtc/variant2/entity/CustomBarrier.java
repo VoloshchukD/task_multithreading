@@ -23,4 +23,8 @@ public class CustomBarrier {
         return threadLimit == threadsReached;
     }
 
+    public void reset() {
+        threadsReached = 0;
+    }
+
 }

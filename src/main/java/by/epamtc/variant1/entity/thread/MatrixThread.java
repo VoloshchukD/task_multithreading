@@ -4,7 +4,6 @@ import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.CyclicBarrier;
 
 public class MatrixThread implements Callable<Integer> {
 
@@ -12,12 +11,9 @@ public class MatrixThread implements Callable<Integer> {
 
     private EditData editData;
 
-    private CyclicBarrier barrier;
-
-    public MatrixThread(Matrix matrix, EditData editData, CyclicBarrier barrier) {
+    public MatrixThread(Matrix matrix, EditData editData) {
         this.matrix = matrix;
         this.editData = editData;
-        this.barrier = barrier;
     }
 
     public int getThreadId() {
@@ -33,17 +29,16 @@ public class MatrixThread implements Callable<Integer> {
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
-        System.out.println("End " + Thread.currentThread().getName());
+        System.out.println("End " + Thread.currentThread().getName() + "; resSum " +  resultSum);
         matrix.unlock();
-        barrier.await();
         return resultSum;
     }
 
-    private void addDiagonalElement() throws InterruptedException {
+    private void addDiagonalElement() {
         matrix.changeValue(editData.getDiagonalIndex(), editData.getDiagonalIndex(), editData.getThreadId());
     }
 
-    private void editElement() throws InterruptedException {
+    private void editElement() {
         int rowIndex = editData.getDiagonalIndex();
         int columnIndex = editData.getDiagonalIndex();
         if (editData.isRowMutable()) {
@@ -54,7 +49,7 @@ public class MatrixThread implements Callable<Integer> {
         matrix.changeValue(rowIndex, columnIndex, editData.getNewElement());
     }
 
-    private int countSum() throws InterruptedException {
+    private int countSum() {
         int sum = 0;
         for (int i = 0; i < matrix.size(); i++) {
             if (i != editData.getDiagonalIndex()) {

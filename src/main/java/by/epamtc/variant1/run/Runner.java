@@ -7,9 +7,12 @@ import by.epamtc.variant1.dao.impl.MatrixDaoImpl;
 import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.exception.DaoException;
+import by.epamtc.variant1.exception.ServiceException;
 import by.epamtc.variant1.service.MatrixThreadExecutor;
 
-import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.concurrent.ExecutionException;
 
 public class Runner {
     public static void main(String[] args) {
@@ -29,7 +32,7 @@ public class Runner {
 //        }
         System.out.println("read " + matrix);
         EditDataDao editDataDao = EditDataDaoImpl.getInstance();
-        EditData[] editData = new EditData[matrix.size() * 3];
+        Queue<EditData> editData = new ArrayDeque<>();
 //        try {
 //            editData = editDataDao.readAllEditData(editData.length);
 //        } catch (IOException e) {
@@ -37,14 +40,14 @@ public class Runner {
 //        } catch (ClassNotFoundException e) {
 //            e.printStackTrace();
 //        }
-        for (int i = 0; i < editData.length; i++) {
+        for (int i = 0; i < (3 * matrixSize); i++) {
             EditData data = new EditData();
             data.setMutableIndex(random(matrix.size()));
             data.setDiagonalIndex(random(matrix.size()));
             data.setRowMutable(random(1) == 1);
             data.setNewElement(random(99));
             data.setThreadId(random(99));
-            editData[i] = data;
+            editData.offer(data);
         }
 
 //        try {
@@ -55,8 +58,8 @@ public class Runner {
 
         MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix, editData, matrix.size());
         try {
-            matrixThreadExecutor.run();
-        } catch (InterruptedException e) {
+            matrixThreadExecutor.execute();
+        } catch (InterruptedException | ExecutionException | ServiceException e) {
             e.printStackTrace();
         }
 

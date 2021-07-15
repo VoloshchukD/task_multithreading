@@ -24,9 +24,10 @@ public class MatrixThreadExecutor {
 
     public void run() throws InterruptedException {
         int currentEditDataIndex = 0;
+        CustomBarrier customBarrier = new CustomBarrier(editsPerPhase);
         for (int i = 0; i < editData.length / editsPerPhase; i++) {
             System.out.println("//////PHASE//////// " + i);
-            CustomBarrier customBarrier = new CustomBarrier(editsPerPhase);
+
             for (int j = 0; j < editsPerPhase; j++) {
                 MatrixThread matrixThread = new MatrixThread(proxyMatrix, editData[currentEditDataIndex]);
                 currentEditDataIndex++;
@@ -34,8 +35,9 @@ public class MatrixThreadExecutor {
                 matrixThread.start();
             }
             while (!customBarrier.isBroken()) {
-                TimeUnit.SECONDS.sleep(3);
+                TimeUnit.SECONDS.sleep(1);
             }
+            customBarrier.reset();
             System.out.println(proxyMatrix.toString());
             System.out.println(proxyMatrix.getSumResult());
 
