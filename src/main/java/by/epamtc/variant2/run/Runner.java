@@ -9,6 +9,9 @@ import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.exception.DaoException;
 import by.epamtc.variant2.service.MatrixThreadExecutor;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 public class Runner {
     public static void main(String[] args) {
 //
@@ -36,16 +39,16 @@ public class Runner {
         }
 
 
-//        EditData[] editData = new EditData[matrix.size() * 3];
-//        for (int i = 0; i < editData.length; i++) {
-//            EditData data = new EditData();
-//            data.setMutableIndex(random(matrix.size()));
-//            data.setDiagonalIndex(random(matrix.size()));
-//            data.setRowMutable(random(1) == 1);
-//            data.setNewElement(random(99));
-//            data.setThreadId(random(99));
-//            editData[i] = data;
-//        }
+        Queue<EditData> editData = new ArrayDeque<>();
+        for (int i = 0; i < matrix.size() * 3; i++) {
+            EditData data = new EditData();
+            data.setMutableIndex(random(matrix.size()));
+            data.setDiagonalIndex(random(matrix.size()));
+            data.setRowMutable(random(1) == 1);
+            data.setNewElement(random(99));
+            data.setThreadId(random(99));
+            editData.offer(data);
+        }
 
 
         EditDataDao editDataDao = EditDataDaoImpl.getInstance();
@@ -55,12 +58,12 @@ public class Runner {
 //            e.printStackTrace();
 //        }
 
-        EditData[] editData = new EditData[matrix.size() * 3] ;
-        try {
-            editData = editDataDao.readAllEditData(matrix.size() * 3);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+//        Queue<EditData> editData = new ArrayDeque<>();
+//        try {
+//            editData = editDataDao.readAllEditData(matrix.size() * 3);
+//        } catch (DaoException e) {
+//            e.printStackTrace();
+//        }
 
         MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix.size(), matrix, editData);
         try {

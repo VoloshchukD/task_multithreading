@@ -7,8 +7,8 @@ import java.io.IOException;
 
 public interface MatrixDao {
 
-   Matrix readMatrix() throws DaoException;
+    Matrix readMatrix() throws DaoException;
 
-   void writeMatrix(Matrix matrix) throws DaoException;
+    void writeMatrix(Matrix matrix) throws DaoException;
 
 }

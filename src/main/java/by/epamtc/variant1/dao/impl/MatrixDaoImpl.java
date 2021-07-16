@@ -49,7 +49,7 @@ public class MatrixDaoImpl implements MatrixDao {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             objectInputStream = new ObjectInputStream(fileInputStream);
             matrix = (Matrix) objectInputStream.readObject();
-        }  catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new DaoException(e);
         } finally {
             if (objectInputStream != null) {

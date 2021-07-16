@@ -29,7 +29,7 @@ public class MatrixThread implements Callable<Integer> {
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
-        System.out.println("End " + Thread.currentThread().getName() + "; resSum " +  resultSum);
+        System.out.println("End " + Thread.currentThread().getName() + "; resSum " + resultSum);
         matrix.unlock();
         return resultSum;
     }

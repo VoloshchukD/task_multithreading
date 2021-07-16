@@ -21,10 +21,6 @@ public class ProxyMatrix {
         return matrix.size();
     }
 
-    public Map<Integer, Integer> getSumResult() {
-        return (Map<Integer, Integer>) sumResult.clone();
-    }
-
     public void resetSumResult() {
         sumResult.clear();
     }

@@ -7,16 +7,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class PhaseWriter {
-
-    private static PhaseWriter instance;
-
-    private static volatile boolean created = false;
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -27,21 +20,6 @@ public class PhaseWriter {
     private static final String THREAD_TEXT = "thread ";
 
     private static final String SUM_TEXT = "result sum = ";
-
-    private PhaseWriter() {
-    }
-
-    public static PhaseWriter getInstance() {
-        if (!created) {
-            synchronized (PhaseWriter.class) {
-                if (instance == null) {
-                    instance = new PhaseWriter();
-                    created = true;
-                }
-            }
-        }
-        return instance;
-    }
 
     public void writeResult(Matrix matrix, Map<Integer, Integer> data) {
         String result = prepareData(matrix, data);

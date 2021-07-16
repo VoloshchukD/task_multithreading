@@ -18,8 +18,8 @@ public class Matrix implements Serializable {
     }
 
     public void changeValue(int rowIndex, int columnIndex, int value) {
-            values[rowIndex][columnIndex] = value;
-            System.out.println("Thread "+Thread.currentThread().getName() + " changed");
+        values[rowIndex][columnIndex] = value;
+        System.out.println("Thread " + Thread.currentThread().getName() + " changed");
     }
 
     public void unlock() {
