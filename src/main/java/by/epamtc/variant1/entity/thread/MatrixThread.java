@@ -24,12 +24,9 @@ public class MatrixThread implements Callable<Integer> {
     public Integer call() throws Exception {
         Thread.currentThread().setName((Integer.toString(editData.getThreadId())));
         matrix.lock();
-        System.out.println("Start " + Thread.currentThread().getName());
-        System.out.println(editData);
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
-        System.out.println("End " + Thread.currentThread().getName() + "; resSum " + resultSum);
         matrix.unlock();
         return resultSum;
     }

@@ -16,11 +16,11 @@ public class EditDataDaoImpl implements EditDataDao {
 
     private static Lock lock = new ReentrantLock();
 
+    private ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
     private static AtomicBoolean created = new AtomicBoolean(false);
 
     private static final String FILE_NAME = "data/variant1/edit.txt";
-
-    private ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
     private EditDataDaoImpl() {
     }

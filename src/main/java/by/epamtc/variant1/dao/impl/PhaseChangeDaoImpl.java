@@ -17,11 +17,11 @@ public class PhaseChangeDaoImpl implements PhaseChangeDao {
 
     private static Lock lock = new ReentrantLock();
 
+    private Lock writeLock = new ReentrantLock();
+
     private static AtomicBoolean created = new AtomicBoolean(false);
 
     private static final String FILE_NAME = "data/variant1/result.txt";
-
-    private Lock writeLock = new ReentrantLock();
 
     private PhaseChangeDaoImpl() {
     }

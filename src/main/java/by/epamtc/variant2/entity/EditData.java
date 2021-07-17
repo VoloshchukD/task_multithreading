@@ -55,9 +55,30 @@ public class EditData implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EditData editData = (EditData) o;
+        return threadId == editData.threadId && diagonalIndex == editData.diagonalIndex
+                && newElement == editData.newElement && mutableIndex == editData.mutableIndex
+                && rowMutable == editData.rowMutable;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 37 * result + threadId;
+        result = 37 * result + diagonalIndex;
+        result = 37 * result + newElement;
+        result = 37 * result + mutableIndex;
+        result = 37 * result + (rowMutable ? 0 : 1);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return getClass().getName() +
-                "@threadId=" + threadId +
+        return getClass().getName()
+                + "@threadId=" + threadId +
                 ", diagonalIndex=" + diagonalIndex +
                 ", newElement=" + newElement +
                 ", mutableIndex=" + mutableIndex +

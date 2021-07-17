@@ -23,9 +23,7 @@ public class MatrixThread extends Thread {
     @Override
     public void run() {
         Thread.currentThread().setName((Integer.toString(editData.getThreadId())));
-        System.out.println("Start " + Thread.currentThread().getName());
         sumResult = proxyMatrix.doAction(editData);
-        System.out.println("End " + Thread.currentThread().getName());
     }
 
 }

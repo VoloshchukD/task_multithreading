@@ -6,7 +6,10 @@ import by.epamtc.variant1.entity.thread.MatrixThread;
 import by.epamtc.variant1.exception.ServiceException;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MatrixThreadExecutor {
 
@@ -39,7 +42,6 @@ public class MatrixThreadExecutor {
             MatrixThread matrixThread = new MatrixThread(matrix, editData.poll());
             phaseThreads.add(matrixThread);
         }
-        phaseThreads.trimToSize();
         return phaseThreads;
     }
 

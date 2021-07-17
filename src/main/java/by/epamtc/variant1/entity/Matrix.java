@@ -19,7 +19,6 @@ public class Matrix implements Serializable {
 
     public void changeValue(int rowIndex, int columnIndex, int value) {
         values[rowIndex][columnIndex] = value;
-        System.out.println("Thread " + Thread.currentThread().getName() + " changed");
     }
 
     public void unlock() {
@@ -32,6 +31,38 @@ public class Matrix implements Serializable {
 
     public int size() {
         return values.length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Matrix matrix = (Matrix) o;
+        if (values == matrix.values) return true;
+        if (values == null || matrix.values == null) return false;
+        if (values.length != matrix.values.length) return false;
+
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].length != matrix.values[i].length) return false;
+            for (int j = 0; j < values.length; j++) {
+                if (values[i][j] != matrix.values[i][j]) return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        int valuesHashcode = 0;
+        for (int i = 0; i < values.length; i++) {
+            for (int j = 0; j < values[i].length; j++) {
+                valuesHashcode += values[i][j];
+            }
+        }
+        result = 37 * result + valuesHashcode;
+        return result;
     }
 
     @Override

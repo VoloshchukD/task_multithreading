@@ -1,7 +1,6 @@
 package by.epamtc.variant2.entity;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class ProxyMatrix {
 
@@ -26,13 +25,10 @@ public class ProxyMatrix {
     }
 
     public synchronized int doAction(EditData editData) {
-        System.out.println(Thread.currentThread().getName() + " Start");
         addDiagonalElement(editData.getDiagonalIndex(), editData.getThreadId());
         editElement(editData.getDiagonalIndex(), editData.getMutableIndex(), editData.getNewElement(), editData.isRowMutable());
         int resultSum = countSum(editData.getDiagonalIndex());
-        System.out.println(Thread.currentThread().getName() + " Finished");
         sumResult.put(Integer.parseInt(Thread.currentThread().getName()), resultSum);
-        System.out.println(matrix + "\n" + editData);
         return resultSum;
     }
 

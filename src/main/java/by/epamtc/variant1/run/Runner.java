@@ -30,7 +30,6 @@ public class Runner {
 //        } catch (IOException | ClassNotFoundException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println("read " + matrix);
         EditDataDao editDataDao = EditDataDaoImpl.getInstance();
         Queue<EditData> editData = new ArrayDeque<>();
 //        try {

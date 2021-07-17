@@ -29,7 +29,6 @@ public class PhaseWriter {
         } catch (DaoException e) {
             logger.log(Level.ERROR, e.getMessage());
         }
-        System.out.println("///////////////PHASEEEE/////////////");
     }
 
     private synchronized String prepareData(Matrix matrix, Map<Integer, Integer> data) {

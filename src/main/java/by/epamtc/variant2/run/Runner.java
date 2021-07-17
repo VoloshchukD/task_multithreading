@@ -14,29 +14,29 @@ import java.util.Queue;
 
 public class Runner {
     public static void main(String[] args) {
-//
-//        int matrixSize = 4;
-//        int[][] values = new int[matrixSize][matrixSize];
-//        for (int i = 0; i < matrixSize; i++) {
-//            for (int j = 0; j < matrixSize; j++) {
-//                values[i][i] = 0;
-//            }
-//        }
-//        Matrix matrix = new Matrix(values);
 
-        MatrixDao matrixDao = MatrixDaoImpl.getInstance();
+        int matrixSize = 4;
+        int[][] values = new int[matrixSize][matrixSize];
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                values[i][i] = 0;
+            }
+        }
+        Matrix matrix = new Matrix(values);
+
+//        MatrixDao matrixDao = MatrixDaoImpl.getInstance();
 //        try {
 //            matrixDao.writeMatrix(matrix);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 
-        Matrix matrix = null;
-        try {
-            matrix = matrixDao.readMatrix();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+//        Matrix matrix = null;
+//        try {
+//            matrix = matrixDao.readMatrix();
+//        } catch (DaoException e) {
+//            e.printStackTrace();
+//        }
 
 
         Queue<EditData> editData = new ArrayDeque<>();

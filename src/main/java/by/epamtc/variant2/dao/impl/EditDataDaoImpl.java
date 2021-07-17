@@ -1,8 +1,8 @@
 package by.epamtc.variant2.dao.impl;
 
-import by.epamtc.variant2.exception.DaoException;
-import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.dao.EditDataDao;
+import by.epamtc.variant2.entity.EditData;
+import by.epamtc.variant2.exception.DaoException;
 
 import java.io.*;
 

@@ -1,7 +1,7 @@
 package by.epamtc.variant2.dao.impl;
 
-import by.epamtc.variant2.exception.DaoException;
 import by.epamtc.variant2.dao.PhaseChangeDao;
+import by.epamtc.variant2.exception.DaoException;
 
 import java.io.BufferedWriter;
 import java.io.File;

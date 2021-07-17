@@ -2,7 +2,6 @@ package by.epamtc.variant2.service;
 
 import by.epamtc.variant2.entity.thread.MatrixThread;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +19,11 @@ public class CustomExecutorService {
         Map<Integer, Integer> result = new LinkedHashMap<>();
         for (int i = 0; i < threads.size(); i++) {
             MatrixThread thread = threads.get(i);
-            System.out.println(thread.getState());
             if (thread.getState() != Thread.State.TERMINATED) {
                 thread.join();
             }
             result.put(Integer.parseInt(thread.getName()), thread.getSumResult());
         }
-        System.out.println("result --- " + result);
         return result;
     }
 

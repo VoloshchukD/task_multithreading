@@ -1,8 +1,8 @@
 package by.epamtc.variant2.dao.impl;
 
-import by.epamtc.variant2.exception.DaoException;
-import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.dao.MatrixDao;
+import by.epamtc.variant2.entity.Matrix;
+import by.epamtc.variant2.exception.DaoException;
 
 import java.io.*;
 

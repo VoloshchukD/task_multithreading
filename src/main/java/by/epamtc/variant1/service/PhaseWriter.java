@@ -5,11 +5,8 @@ import by.epamtc.variant1.dao.impl.PhaseChangeDaoImpl;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.exception.DaoException;
 import by.epamtc.variant1.exception.ServiceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
-
 
 public class PhaseWriter {
 
@@ -29,7 +26,6 @@ public class PhaseWriter {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        System.out.println("///////////////PHASEEEE/////////////");
     }
 
     private String makeString(Matrix matrix, Map<Integer, Integer> data) {

@@ -16,11 +16,11 @@ public class MatrixDaoImpl implements MatrixDao {
 
     private static Lock lock = new ReentrantLock();
 
+    private ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
     private static AtomicBoolean created = new AtomicBoolean(false);
 
     private static final String FILE_NAME = "data/variant1/matrix.txt";
-
-    private ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
     private MatrixDaoImpl() {
     }
