@@ -5,6 +5,8 @@ import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.exception.DaoException;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -64,15 +66,15 @@ public class EditDataDaoImpl implements EditDataDao {
         return editData;
     }
 
-    public EditData[] readAllEditData(int quantity) throws DaoException {
+    public List<EditData> readAllEditData(int quantity) throws DaoException {
         readWriteLock.readLock().lock();
-        EditData[] editData = new EditData[quantity];
+        List<EditData> editData = new ArrayList<>();
         ObjectInputStream objectInputStream = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             objectInputStream = new ObjectInputStream(fileInputStream);
             for (int i = 0; i < quantity; i++) {
-                editData[i] = (EditData) objectInputStream.readObject();
+                editData.add((EditData) objectInputStream.readObject());
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new DaoException(e);
@@ -114,15 +116,15 @@ public class EditDataDaoImpl implements EditDataDao {
         return saved;
     }
 
-    public boolean writeAllEditData(EditData[] editData) throws DaoException {
+    public boolean writeAllEditData(List<EditData> editData) throws DaoException {
         readWriteLock.writeLock().lock();
         ObjectOutputStream objectOutputStream = null;
         boolean saved = false;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            for (int i = 0; i < editData.length; i++) {
-                objectOutputStream.writeObject(editData[i]);
+            for (int i = 0; i < editData.size(); i++) {
+                objectOutputStream.writeObject(editData.get(i));
             }
             saved = true;
         } catch (IOException e) {

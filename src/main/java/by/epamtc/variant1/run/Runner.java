@@ -11,49 +11,29 @@ import by.epamtc.variant1.exception.ServiceException;
 import by.epamtc.variant1.service.MatrixThreadExecutor;
 
 import java.util.ArrayDeque;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 
 public class Runner {
     public static void main(String[] args) {
+        Matrix matrix = null;
         MatrixDao matrixDao = MatrixDaoImpl.getInstance();
-        int matrixSize = 4;
-        int[][] values = new int[matrixSize][matrixSize];
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                values[i][i] = 0;
-            }
-        }
-        Matrix matrix = new Matrix(values);
-//        try {
-//            matrix = matrixDao.readMatrix();
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-        EditDataDao editDataDao = EditDataDaoImpl.getInstance();
-        Queue<EditData> editData = new ArrayDeque<>();
-//        try {
-//            editData = editDataDao.readAllEditData(editData.length);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-        for (int i = 0; i < (3 * matrixSize); i++) {
-            EditData data = new EditData();
-            data.setMutableIndex(random(matrix.size()));
-            data.setDiagonalIndex(random(matrix.size()));
-            data.setRowMutable(random(1) == 1);
-            data.setNewElement(random(99));
-            data.setThreadId(random(99));
-            editData.offer(data);
+        try {
+            matrix = matrixDao.readMatrix();
+        } catch (DaoException e) {
+            e.printStackTrace();
         }
 
-//        try {
-//            editDataDao.writeAllEditData(editData);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        EditDataDao editDataDao = EditDataDaoImpl.getInstance();
+        int phaseNumber = 3;
+        List<EditData> editDataList = null;
+        try {
+            editDataList = editDataDao.readAllEditData(phaseNumber * matrix.size());
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        Queue<EditData> editData = new ArrayDeque<>(editDataList);
 
         MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix, editData, matrix.size());
         try {
@@ -62,21 +42,6 @@ public class Runner {
             e.printStackTrace();
         }
 
-        saveMatrix(matrix);
-
-    }
-
-    public static void saveMatrix(Matrix matrix) {
-        MatrixDao matrixDao = MatrixDaoImpl.getInstance();
-        try {
-            matrixDao.writeMatrix(matrix);
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static int random(int upperBorder) {
-        return 0 + (int) (Math.random() * upperBorder);
     }
 
 }

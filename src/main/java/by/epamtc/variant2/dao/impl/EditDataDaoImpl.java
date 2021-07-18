@@ -5,6 +5,8 @@ import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.exception.DaoException;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditDataDaoImpl implements EditDataDao {
 
@@ -50,14 +52,14 @@ public class EditDataDaoImpl implements EditDataDao {
         return editData;
     }
 
-    public synchronized EditData[] readAllEditData(int quantity) throws DaoException {
-        EditData[] editData = new EditData[quantity];
+    public synchronized List<EditData> readAllEditData(int quantity) throws DaoException {
+        List<EditData> editData = new ArrayList<>();
         ObjectInputStream objectInputStream = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             objectInputStream = new ObjectInputStream(fileInputStream);
             for (int i = 0; i < quantity; i++) {
-                editData[i] = (EditData) objectInputStream.readObject();
+                editData.add((EditData) objectInputStream.readObject());
             }
         } catch (IOException | ClassNotFoundException e) {
             throw new DaoException(e);
@@ -96,14 +98,14 @@ public class EditDataDaoImpl implements EditDataDao {
         return saved;
     }
 
-    public synchronized boolean writeAllEditData(EditData[] editData) throws DaoException {
+    public synchronized boolean writeAllEditData(List<EditData> editData) throws DaoException {
         ObjectOutputStream objectOutputStream = null;
         boolean saved = false;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            for (int i = 0; i < editData.length; i++) {
-                objectOutputStream.writeObject(editData[i]);
+            for (int i = 0; i < editData.size(); i++) {
+                objectOutputStream.writeObject(editData.get(i));
             }
             saved = true;
         } catch (IOException e) {

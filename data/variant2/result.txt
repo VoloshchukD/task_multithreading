@@ -1,0 +1,33 @@
+PHASE
+thread 29 result sum = 81
+thread 46 result sum = 118
+thread 15 result sum = 78
+thread 89 result sum = 185
+by.epamtc.variant2.entity.Matrix
+89  0  0  0  
+20  0  0  0  
+52  0  26  0  
+24  0  0  0  
+
+PHASE
+thread 44 result sum = 181
+thread 24 result sum = 214
+thread 91 result sum = 200
+thread 63 result sum = 292
+by.epamtc.variant2.entity.Matrix
+33  0  85  0  
+20  0  7  0  
+52  0  63  85  
+24  0  0  91  
+
+PHASE
+thread 37 result sum = 208
+thread 50 result sum = 228
+thread 63 result sum = 151
+thread 86 result sum = 238
+by.epamtc.variant2.entity.Matrix
+57  61  85  43  
+20  63  7  0  
+42  0  63  85  
+24  0  0  86  
+

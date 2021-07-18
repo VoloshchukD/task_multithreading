@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class PhaseWriter {
 
-    private static final String PHASE_TEXT = "////PHASE////";
+    private static final String PHASE_TEXT = "PHASE";
 
     private static final String TEXT_SEPARATOR = " ";
 

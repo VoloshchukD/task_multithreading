@@ -13,7 +13,7 @@ public class PhaseWriter {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private static final String PHASE_TEXT = "////PHASE////";
+    private static final String PHASE_TEXT = "PHASE";
 
     private static final String TEXT_SEPARATOR = " ";
 
