@@ -1,5 +1,5 @@
 PHASE
-thread 60 result sum = 203
+thread 60 result sum = 140
 thread 15 result sum = 78
 thread 37 result sum = 105
 thread 95 result sum = 169

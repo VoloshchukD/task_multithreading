@@ -1,5 +1,6 @@
 package by.epamtc.variant2.run;
 
+import by.epamtc.variant1.exception.ServiceException;
 import by.epamtc.variant2.dao.EditDataDao;
 import by.epamtc.variant2.dao.MatrixDao;
 import by.epamtc.variant2.dao.impl.EditDataDaoImpl;
@@ -7,7 +8,7 @@ import by.epamtc.variant2.dao.impl.MatrixDaoImpl;
 import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.exception.DaoException;
-import by.epamtc.variant2.service.MatrixThreadExecutor;
+import by.epamtc.variant2.service.MatrixService;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -33,10 +34,10 @@ public class Runner {
         }
         Queue<EditData> editData = new ArrayDeque<>(list);
 
-        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix.size(), matrix, editData);
+        MatrixService matrixService = new MatrixService(matrix.size(), matrix, editData);
         try {
-            matrixThreadExecutor.run();
-        } catch (InterruptedException e) {
+            matrixService.run();
+        } catch (InterruptedException | ServiceException e) {
             e.printStackTrace();
         }
 

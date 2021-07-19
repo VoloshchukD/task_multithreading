@@ -1,0 +1,4 @@
+2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Phase matrix changes write
+2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Phase matrix changes write
+2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Phase matrix changes write
+2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.MatrixService- Matrix threads executed

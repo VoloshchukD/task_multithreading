@@ -1,5 +1,6 @@
 package by.epamtc.variant2.service;
 
+import by.epamtc.variant1.exception.ServiceException;
 import by.epamtc.variant2.dao.impl.PhaseChangeDaoImpl;
 import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.exception.DaoException;
@@ -21,17 +22,18 @@ public class PhaseWriter {
 
     private static final String SUM_TEXT = "result sum = ";
 
-    public void writeResult(Matrix matrix, Map<Integer, Integer> data) {
+    public void writeResult(Matrix matrix, Map<Integer, Integer> data) throws ServiceException {
         String result = prepareData(matrix, data);
         PhaseChangeDaoImpl matrixChangeDao = PhaseChangeDaoImpl.getInstance();
         try {
             matrixChangeDao.writeMatrixChange(result);
+            logger.log(Level.INFO, "Phase matrix changes write");
         } catch (DaoException e) {
-            logger.log(Level.ERROR, e.getMessage());
+            throw new ServiceException(e);
         }
     }
 
-    private synchronized String prepareData(Matrix matrix, Map<Integer, Integer> data) {
+    private String prepareData(Matrix matrix, Map<Integer, Integer> data) {
         StringBuilder stringBuilder = new StringBuilder(PHASE_TEXT);
         stringBuilder.append("\n");
         for (Map.Entry<Integer, Integer> entry : data.entrySet()) {

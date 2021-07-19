@@ -8,7 +8,7 @@ import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.exception.DaoException;
 import by.epamtc.variant1.exception.ServiceException;
-import by.epamtc.variant1.service.MatrixThreadExecutor;
+import by.epamtc.variant1.service.MatrixService;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -35,9 +35,9 @@ public class Runner {
         }
         Queue<EditData> editData = new ArrayDeque<>(editDataList);
 
-        MatrixThreadExecutor matrixThreadExecutor = new MatrixThreadExecutor(matrix, editData, matrix.size());
+        MatrixService matrixService = new MatrixService(matrix, editData, matrix.size());
         try {
-            matrixThreadExecutor.execute();
+            matrixService.execute();
         } catch (InterruptedException | ExecutionException | ServiceException e) {
             e.printStackTrace();
         }

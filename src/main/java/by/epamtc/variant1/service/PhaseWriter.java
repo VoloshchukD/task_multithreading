@@ -5,6 +5,9 @@ import by.epamtc.variant1.dao.impl.PhaseChangeDaoImpl;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.exception.DaoException;
 import by.epamtc.variant1.exception.ServiceException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
@@ -18,6 +21,8 @@ public class PhaseWriter {
 
     private static final String SUM_TEXT = "result sum = ";
 
+    private static final Logger logger = LogManager.getLogger();
+
     public void writeResult(Matrix matrix, Map<Integer, Integer> data) throws ServiceException {
         String result = makeString(matrix, data);
         PhaseChangeDao matrixChangeDao = PhaseChangeDaoImpl.getInstance();
@@ -26,6 +31,7 @@ public class PhaseWriter {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
+        logger.log(Level.INFO, "Phase matrix changes write");
     }
 
     private String makeString(Matrix matrix, Map<Integer, Integer> data) {

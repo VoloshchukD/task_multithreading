@@ -1,16 +1,20 @@
 package by.epamtc.variant2.service;
 
+import by.epamtc.variant1.exception.ServiceException;
 import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.entity.ProxyMatrix;
 import by.epamtc.variant2.entity.thread.MatrixThread;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-public class MatrixThreadExecutor {
+public class MatrixService {
 
     private int editsPerPhase;
 
@@ -18,13 +22,15 @@ public class MatrixThreadExecutor {
 
     private Queue<EditData> editData;
 
-    public MatrixThreadExecutor(int editsPerPhase, Matrix matrix, Queue<EditData> editData) {
+    private static final Logger logger = LogManager.getLogger();
+
+    public MatrixService(int editsPerPhase, Matrix matrix, Queue<EditData> editData) {
         this.editsPerPhase = editsPerPhase;
         this.proxyMatrix = new ProxyMatrix(matrix);
         this.editData = editData;
     }
 
-    public void run() throws InterruptedException {
+    public void run() throws InterruptedException, ServiceException {
         int iterations = editData.size();
         CustomExecutorService executorService = new CustomExecutorService();
         for (int i = 0; i < (iterations / editsPerPhase); i++) {
@@ -32,6 +38,7 @@ public class MatrixThreadExecutor {
             Map<Integer, Integer> sumResults = executorService.invokeAll(phaseThreads);
             writeResult(sumResults);
         }
+        logger.log(Level.INFO, "Matrix threads executed");
     }
 
     private List<MatrixThread> initializePhaseThreads() {
@@ -44,7 +51,7 @@ public class MatrixThreadExecutor {
         return phaseThreads;
     }
 
-    private void writeResult(Map<Integer, Integer> sumResults) {
+    private void writeResult(Map<Integer, Integer> sumResults) throws ServiceException {
         PhaseWriter phaseWriter = new PhaseWriter();
         phaseWriter.writeResult(proxyMatrix.getMatrix(), sumResults);
     }
