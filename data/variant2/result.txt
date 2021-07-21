@@ -1,33 +1,30 @@
-PHASE
-thread 29 result sum = 81
-thread 46 result sum = 118
-thread 15 result sum = 78
-thread 89 result sum = 185
+thread 29 result sum = 81 by.epamtc.variant2.entity.EditData@threadId=29, diagonalIndex=0, newElement=52, mutableIndex=2, rowMutable=false
+thread 89 result sum = 165 by.epamtc.variant2.entity.EditData@threadId=89, diagonalIndex=0, newElement=24, mutableIndex=3, rowMutable=false
+thread 15 result sum = 78 by.epamtc.variant2.entity.EditData@threadId=15, diagonalIndex=2, newElement=26, mutableIndex=2, rowMutable=false
+thread 46 result sum = 142 by.epamtc.variant2.entity.EditData@threadId=46, diagonalIndex=0, newElement=20, mutableIndex=1, rowMutable=false
 by.epamtc.variant2.entity.Matrix
-89  0  0  0  
+46  0  0  0  
 20  0  0  0  
 52  0  26  0  
 24  0  0  0  
-
-PHASE
-thread 44 result sum = 181
-thread 24 result sum = 214
-thread 91 result sum = 200
-thread 63 result sum = 292
+PHASE END
+thread 44 result sum = 181 by.epamtc.variant2.entity.EditData@threadId=44, diagonalIndex=2, newElement=85, mutableIndex=0, rowMutable=false
+thread 63 result sum = 207 by.epamtc.variant2.entity.EditData@threadId=63, diagonalIndex=2, newElement=7, mutableIndex=1, rowMutable=false
+thread 91 result sum = 200 by.epamtc.variant2.entity.EditData@threadId=91, diagonalIndex=3, newElement=85, mutableIndex=2, rowMutable=false
+thread 24 result sum = 214 by.epamtc.variant2.entity.EditData@threadId=24, diagonalIndex=0, newElement=33, mutableIndex=0, rowMutable=false
 by.epamtc.variant2.entity.Matrix
 33  0  85  0  
 20  0  7  0  
 52  0  63  85  
 24  0  0  91  
-
-PHASE
-thread 37 result sum = 208
-thread 50 result sum = 228
-thread 63 result sum = 151
-thread 86 result sum = 238
+PHASE END
+thread 37 result sum = 208 by.epamtc.variant2.entity.EditData@threadId=37, diagonalIndex=0, newElement=42, mutableIndex=2, rowMutable=false
+thread 50 result sum = 228 by.epamtc.variant2.entity.EditData@threadId=50, diagonalIndex=0, newElement=57, mutableIndex=0, rowMutable=false
+thread 63 result sum = 151 by.epamtc.variant2.entity.EditData@threadId=63, diagonalIndex=1, newElement=61, mutableIndex=0, rowMutable=false
+thread 86 result sum = 238 by.epamtc.variant2.entity.EditData@threadId=86, diagonalIndex=3, newElement=43, mutableIndex=0, rowMutable=false
 by.epamtc.variant2.entity.Matrix
 57  61  85  43  
 20  63  7  0  
 42  0  63  85  
 24  0  0  86  
-
+PHASE END

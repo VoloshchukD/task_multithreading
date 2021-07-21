@@ -2,6 +2,8 @@ package by.epamtc.variant1.entity.thread;
 
 import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
+import by.epamtc.variant1.exception.ServiceException;
+import by.epamtc.variant1.service.PhaseWriter;
 
 import java.util.concurrent.Callable;
 
@@ -27,6 +29,7 @@ public class MatrixThread implements Callable<Integer> {
         addDiagonalElement();
         editElement();
         int resultSum = countSum();
+        saveResult(resultSum);
         matrix.unlock();
         return resultSum;
     }
@@ -56,6 +59,11 @@ public class MatrixThread implements Callable<Integer> {
         }
         sum += matrix.getElement(editData.getDiagonalIndex(), editData.getDiagonalIndex());
         return sum;
+    }
+
+    private void saveResult(int sumResult) throws ServiceException {
+        PhaseWriter phaseWriter = new PhaseWriter();
+        phaseWriter.writeEditResult(editData, sumResult);
     }
 
 }

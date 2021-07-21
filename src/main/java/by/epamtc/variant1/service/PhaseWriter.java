@@ -2,6 +2,7 @@ package by.epamtc.variant1.service;
 
 import by.epamtc.variant1.dao.PhaseChangeDao;
 import by.epamtc.variant1.dao.impl.PhaseChangeDaoImpl;
+import by.epamtc.variant1.entity.EditData;
 import by.epamtc.variant1.entity.Matrix;
 import by.epamtc.variant1.exception.DaoException;
 import by.epamtc.variant1.exception.ServiceException;
@@ -9,11 +10,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
-
 public class PhaseWriter {
 
-    private static final String PHASE_TEXT = "PHASE";
+    private static final String PHASE_TEXT = "PHASE END";
 
     private static final String TEXT_SEPARATOR = " ";
 
@@ -23,28 +22,32 @@ public class PhaseWriter {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public void writeResult(Matrix matrix, Map<Integer, Integer> data) throws ServiceException {
-        String result = makeString(matrix, data);
+    public void writeEditResult(EditData editData, Integer sumResult) throws ServiceException {
+        StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(THREAD_TEXT).append(editData.getThreadId()).append(TEXT_SEPARATOR);
+            stringBuilder.append(SUM_TEXT).append(sumResult).append(TEXT_SEPARATOR);
+            stringBuilder.append(editData.toString());
+            stringBuilder.append("\n");
         PhaseChangeDao matrixChangeDao = PhaseChangeDaoImpl.getInstance();
         try {
-            matrixChangeDao.writeMatrixChange(result);
+            matrixChangeDao.writeText(stringBuilder.toString());
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        logger.log(Level.INFO, "Phase matrix changes write");
+        logger.log(Level.INFO, "Edit by thread write");
     }
 
-    private String makeString(Matrix matrix, Map<Integer, Integer> data) {
-        StringBuilder stringBuilder = new StringBuilder(PHASE_TEXT);
+    public void writeMatrix(Matrix matrix) throws ServiceException {
+        StringBuilder stringBuilder = new StringBuilder(matrix.toString());
+        stringBuilder.append(PHASE_TEXT);
         stringBuilder.append("\n");
-        for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
-            stringBuilder.append(THREAD_TEXT).append(entry.getKey()).append(TEXT_SEPARATOR);
-            stringBuilder.append(SUM_TEXT).append(entry.getValue());
-            stringBuilder.append("\n");
+        PhaseChangeDao matrixChangeDao = PhaseChangeDaoImpl.getInstance();
+        try {
+            matrixChangeDao.writeText(stringBuilder.toString());
+        } catch (DaoException e) {
+            throw new ServiceException(e);
         }
-        stringBuilder.append(matrix);
-        stringBuilder.append("\n");
-        return stringBuilder.toString();
+        logger.log(Level.INFO, "Matrix changes write");
     }
 
 }

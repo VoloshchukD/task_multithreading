@@ -1,12 +1,11 @@
 package by.epamtc.variant2.entity;
 
-import java.util.HashMap;
+import by.epamtc.variant2.exception.ServiceException;
+import by.epamtc.variant2.service.PhaseWriter;
 
 public class ProxyMatrix {
 
     private Matrix matrix;
-
-    private HashMap<Integer, Integer> sumResult = new HashMap<>();
 
     public ProxyMatrix(Matrix matrix) {
         this.matrix = matrix;
@@ -20,16 +19,11 @@ public class ProxyMatrix {
         return matrix.size();
     }
 
-    public void resetSumResult() {
-        sumResult.clear();
-    }
-
-    public synchronized int doAction(EditData editData) {
+    public synchronized void doAction(EditData editData) throws ServiceException {
         addDiagonalElement(editData.getDiagonalIndex(), editData.getThreadId());
         editElement(editData.getDiagonalIndex(), editData.getMutableIndex(), editData.getNewElement(), editData.isRowMutable());
         int resultSum = countSum(editData.getDiagonalIndex());
-        sumResult.put(Integer.parseInt(Thread.currentThread().getName()), resultSum);
-        return resultSum;
+        saveResult(resultSum, editData);
     }
 
     private void addDiagonalElement(int diagonalIndex, int newElement) {
@@ -57,6 +51,12 @@ public class ProxyMatrix {
         }
         sum += matrix.getElement(diagonalIndex, diagonalIndex);
         return sum;
+    }
+
+    private void saveResult(int sumResult, EditData editData)
+            throws ServiceException {
+        PhaseWriter phaseWriter = new PhaseWriter();
+        phaseWriter.writeEditResult(editData, sumResult);
     }
 
     @Override

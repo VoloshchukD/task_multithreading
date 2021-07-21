@@ -4,6 +4,6 @@ import by.epamtc.variant1.exception.DaoException;
 
 public interface PhaseChangeDao {
 
-    void writeMatrixChange(String text) throws DaoException;
+    void writeText(String text) throws DaoException;
 
 }

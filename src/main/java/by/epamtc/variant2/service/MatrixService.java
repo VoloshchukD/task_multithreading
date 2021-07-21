@@ -1,6 +1,7 @@
 package by.epamtc.variant2.service;
 
-import by.epamtc.variant1.exception.ServiceException;
+import by.epamtc.variant2.entity.thread.CustomExecutorService;
+import by.epamtc.variant2.exception.ServiceException;
 import by.epamtc.variant2.entity.EditData;
 import by.epamtc.variant2.entity.Matrix;
 import by.epamtc.variant2.entity.ProxyMatrix;
@@ -11,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 
 public class MatrixService {
@@ -35,8 +35,8 @@ public class MatrixService {
         CustomExecutorService executorService = new CustomExecutorService();
         for (int i = 0; i < (iterations / editsPerPhase); i++) {
             List<MatrixThread> phaseThreads = initializePhaseThreads();
-            Map<Integer, Integer> sumResults = executorService.invokeAll(phaseThreads);
-            writeResult(sumResults);
+            executorService.invokeAll(phaseThreads);
+            writeMatrix();
         }
         logger.log(Level.INFO, "Matrix threads executed");
     }
@@ -47,13 +47,12 @@ public class MatrixService {
             MatrixThread matrixThread = new MatrixThread(proxyMatrix, editData.poll());
             phaseThreads.add(matrixThread);
         }
-        phaseThreads.trimToSize();
         return phaseThreads;
     }
 
-    private void writeResult(Map<Integer, Integer> sumResults) throws ServiceException {
+    private void writeMatrix() throws ServiceException {
         PhaseWriter phaseWriter = new PhaseWriter();
-        phaseWriter.writeResult(proxyMatrix.getMatrix(), sumResults);
+        phaseWriter.writeMatrix(proxyMatrix.getMatrix());
     }
 
 }

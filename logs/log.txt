@@ -1,4 +1,16 @@
-2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Phase matrix changes write
-2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Phase matrix changes write
-2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Phase matrix changes write
-2021-07-19 12:12:31 [main] INFO  by.epamtc.variant2.service.MatrixService- Matrix threads executed
+2021-07-21 12:08:25 [29] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [89] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [15] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [46] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Matrix changes write
+2021-07-21 12:08:25 [44] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [63] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [91] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [24] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Matrix changes write
+2021-07-21 12:08:25 [37] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [50] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [63] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [86] INFO  by.epamtc.variant2.service.PhaseWriter- Edit by thread write
+2021-07-21 12:08:25 [main] INFO  by.epamtc.variant2.service.PhaseWriter- Matrix changes write
+2021-07-21 12:08:25 [main] INFO  by.epamtc.variant2.service.MatrixService- Matrix threads executed

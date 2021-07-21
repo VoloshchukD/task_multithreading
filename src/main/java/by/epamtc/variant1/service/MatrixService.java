@@ -9,10 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class MatrixService {
 
@@ -35,8 +32,8 @@ public class MatrixService {
         ExecutorService executorService = Executors.newFixedThreadPool(editsPerPhase);
         for (int i = 0; i < (iterations / editsPerPhase); i++) {
             List<MatrixThread> phaseThreads = initializePhaseThreads();
-            List<Future<Integer>> sumResults = executorService.invokeAll(phaseThreads);
-            writeResult(phaseThreads, sumResults);
+            executorService.invokeAll(phaseThreads);
+            writeMatrix();
         }
         logger.log(Level.INFO, "Matrix threads executed");
         executorService.shutdown();
@@ -51,20 +48,10 @@ public class MatrixService {
         return phaseThreads;
     }
 
-    private void writeResult(List<MatrixThread> phaseThreads, List<Future<Integer>> sumResults)
-            throws ExecutionException, InterruptedException, ServiceException {
-        Map<Integer, Integer> result = prepareData(phaseThreads, sumResults);
+    private void writeMatrix()
+            throws ServiceException {
         PhaseWriter phaseWriter = new PhaseWriter();
-        phaseWriter.writeResult(matrix, result);
-    }
-
-    private Map<Integer, Integer> prepareData(List<MatrixThread> phaseThreads, List<Future<Integer>> sumResults)
-            throws ExecutionException, InterruptedException {
-        Map<Integer, Integer> data = new LinkedHashMap<>();
-        for (int i = 0; i < phaseThreads.size(); i++) {
-            data.put(phaseThreads.get(i).getThreadId(), sumResults.get(i).get());
-        }
-        return data;
+        phaseWriter.writeMatrix(matrix);
     }
 
 }

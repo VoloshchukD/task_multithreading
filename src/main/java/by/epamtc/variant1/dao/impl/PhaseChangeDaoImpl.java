@@ -42,7 +42,7 @@ public class PhaseChangeDaoImpl implements PhaseChangeDao {
     }
 
     @Override
-    public void writeMatrixChange(String text) throws DaoException {
+    public void writeText(String text) throws DaoException {
         writeLock.lock();
         File file = new File(FILE_NAME);
         BufferedWriter bufferedWriter = null;
