@@ -19,7 +19,7 @@ public class ProxyMatrix {
         return matrix.size();
     }
 
-    public synchronized void doAction(EditData editData) throws ServiceException {
+    public synchronized void editMatrix(EditData editData) throws ServiceException {
         addDiagonalElement(editData.getDiagonalIndex(), editData.getThreadId());
         editElement(editData.getDiagonalIndex(), editData.getMutableIndex(), editData.getNewElement(), editData.isRowMutable());
         int resultSum = countSum(editData.getDiagonalIndex());

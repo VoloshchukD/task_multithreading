@@ -18,10 +18,6 @@ public class MatrixThread implements Callable<Integer> {
         this.editData = editData;
     }
 
-    public int getThreadId() {
-        return editData.getThreadId();
-    }
-
     @Override
     public Integer call() throws Exception {
         Thread.currentThread().setName((Integer.toString(editData.getThreadId())));

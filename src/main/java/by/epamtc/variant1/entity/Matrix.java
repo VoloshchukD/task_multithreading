@@ -7,6 +7,7 @@ public class Matrix implements Serializable {
 
     private int[][] values;
 
+    // use of such semaphore caused by incorrect work of reentrant lock in fair mode
     private final Semaphore semaphore = new Semaphore(1, true);
 
     public Matrix(int[][] values) {

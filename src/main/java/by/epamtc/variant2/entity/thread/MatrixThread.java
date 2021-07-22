@@ -24,7 +24,7 @@ public class MatrixThread extends Thread {
     public void run() {
         Thread.currentThread().setName((Integer.toString(editData.getThreadId())));
         try {
-            proxyMatrix.doAction(editData);
+            proxyMatrix.editMatrix(editData);
         } catch (ServiceException e) {
             logger.log(Level.ERROR, e);
         }
